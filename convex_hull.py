@@ -18,15 +18,18 @@ def compute_hull_dvcq(points: list[tuple[float, float]]) -> list[tuple[float, fl
 
 def merge_hulls(left_hull: list[tuple[float, float]], 
                 right_hull: list[tuple[float, float]]) -> list[tuple[float, float]]:
-    left_hull_start = max(left_hull, key=lambda point: point[0])
-    right_hull_start = min(right_hull, key=lambda point: point[0])
-    left_hull_ordered_clockwise = left_hull[left_hull.index(left_hull_start):] + left_hull[:left_hull.index(left_hull_start)]
-    right_hull_ordered_clockwise = right_hull[right_hull.index(right_hull_start):] + right_hull[:right_hull.index(right_hull_start)]
+    left_hull_start_index = left_hull.index(max(left_hull, key=lambda point: point[0]))
+    right_hull_start_index = right_hull.index(min(right_hull, key=lambda point: point[0]))
+    left_hull_ordered_clockwise = left_hull[left_hull_start_index:] + left_hull[:left_hull_start_index]
+    right_hull_ordered_clockwise = right_hull[right_hull_start_index:] + right_hull[:right_hull_start_index]
     left_hull_ordered_counterclockwise = get_counterclockwise(left_hull_ordered_clockwise)
     right_hull_ordered_counterclockwise = get_counterclockwise(right_hull_ordered_clockwise)
-    left_upper, right_upper = get_tangent(left_hull_ordered_counterclockwise, right_hull_ordered_clockwise, "upper")
-    left_lower, right_lower = get_tangent(left_hull_ordered_clockwise, right_hull_ordered_counterclockwise, "lower")
-    final_hull = extract_new_hull(left_hull_ordered_clockwise, right_hull_ordered_clockwise, left_upper, right_upper, left_lower, right_lower)
+    left_upper, right_upper = get_tangent(left_hull_ordered_counterclockwise, 
+                                          right_hull_ordered_clockwise, "upper")
+    left_lower, right_lower = get_tangent(left_hull_ordered_clockwise, 
+                                          right_hull_ordered_counterclockwise, "lower")
+    final_hull = extract_new_hull(left_hull_ordered_clockwise, right_hull_ordered_clockwise, 
+                                  left_upper, right_upper, left_lower, right_lower)
     return final_hull
 
 def extract_new_hull(left_hull, right_hull, left_upper, right_upper, left_lower, right_lower):
