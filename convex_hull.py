@@ -33,10 +33,16 @@ def merge_hulls(left_hull: list[tuple[float, float]],
     return final_hull
 
 def extract_new_hull(left_hull, right_hull, left_upper, right_upper, left_lower, right_lower):
-    left_hull_lower_first = left_hull[left_hull.index(left_lower):] + left_hull[:left_hull.index(left_lower)]
-    right_hull_upper_first = right_hull[right_hull.index(right_upper):] + right_hull[:right_hull.index(right_upper)]
-    spliced_left = left_hull_lower_first[left_hull_lower_first.index(left_lower):left_hull_lower_first.index(left_upper)+1]
-    spliced_right = right_hull_upper_first[right_hull_upper_first.index(right_upper):right_hull_upper_first.index(right_lower)+1]
+    left_lower_index = left_hull.index(left_lower)
+    right_upper_index = right_hull.index(right_upper)
+    left_hull_lower_first = left_hull[left_lower_index:] + left_hull[:left_lower_index]
+    right_hull_upper_first = right_hull[right_upper_index:] + right_hull[:right_upper_index]
+    left_shifted_lower_index = left_hull_lower_first.index(left_lower)
+    left_shifted_upper_index = left_hull_lower_first.index(left_upper)
+    spliced_left = left_hull_lower_first[left_shifted_lower_index:left_shifted_upper_index+1]
+    right_shifted_upper = right_hull_upper_first.index(right_upper)
+    right_shifted_lower = right_hull_upper_first.index(right_lower)
+    spliced_right = right_hull_upper_first[right_shifted_upper:right_shifted_lower+1]
     return spliced_left + spliced_right
 
 def get_tangent(left_hull, right_hull, tangent_type: str):
@@ -81,7 +87,7 @@ def process_rotation(hull, current_line, current_slope, index, changed, terminal
         changed = True
     return current_line, current_slope, index, changed
 
-def compute_slope(point1, point2):
+def compute_slope(point1, point2) -> float:
     if point2[0] - point1[0] == 0:
         return float('inf')
     return (point2[1] - point1[1]) / (point2[0] - point1[0])
@@ -90,22 +96,6 @@ def get_counterclockwise(hull: list[tuple[float, float]]) -> list[tuple[float, f
     if len(hull) == 1:
         return hull
     return [hull[0]] + list(reversed(hull[1:]))
-
-def is_tangent(tangent_type: str, left_point, right_point, hull):
-    assert tangent_type in ("upper", "lower")
-    if tangent_type == "upper":
-        func = lambda left, right: left > right
-    elif tangent_type == "lower":
-        func = lambda left, right: left < right
-    m = (right_point[1] - left_point[1]) / (right_point[0] - left_point[0])
-    b = left_point[1] - (m * left_point[0])
-    for point in hull:
-        if point == left_point or point == right_point:
-            continue
-        y_on_line = m * point[0] + b
-        if func(point[1], y_on_line):
-            return False
-    return True
 
 
 def divide_points(points: list[tuple[float, float]]) -> tuple[list[tuple[float, float]], list[tuple[float, float]]]:
