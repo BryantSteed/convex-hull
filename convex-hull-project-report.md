@@ -4,6 +4,8 @@
 
 ### Design Discussion
 
+With Thomas Esplin on 10/21/2025
+
 My plan to implement this algorithm is to recursively call the convex hull function on smaller and smaller hulls, dividing the amount of work to be done in two each time. My base case for the function will be when the number of point is simply 1. This is because if there's only 1 point, it must be the hull.
 
 To merge the hulls back together, I will simply find the upper and lower tangent. The points that make up the upper and lower tangents make up the hull. I will then continue the merging process until the whole hull is constructed. The pseudocode for doing this is quite straight forward. I will use tuples to represent points and may use the numpy to calculate the slopes of the various lines in a performative manner.
@@ -21,6 +23,8 @@ To merge the hulls back together, I will simply find the upper and lower tangent
 ## Core
 
 ### Design Discussion
+
+With Thomas Esplin on 10/21/2025
 
 For my design, my goal is to ensure that I am able to path both the baseline and core tests. I anticipate that the test with the shared tangent point will be a difficult case to handle. I will make sure that this case does not break my code by making sure that I adequately separate the point from each constituent hull that I merge.
 
@@ -50,6 +54,8 @@ There could be further problems when using different types of distributions to c
 ## Stretch 1
 
 ### Design Discussion
+
+With Thomas Esplin on 10/21/2025
 
 I will use the Jarvis's March gift wrapping algorithm. Instead of doing a divide and conquer that recursively split the super hull down the middle, it starts with the left most point (which is guaranteed to be on the hull) and finds the next hull point by finding the point that makes the smallest counterclockwise angle when compared to the previous point.
 
@@ -82,6 +88,8 @@ The idea is to continue doing this and wrap around until you arrive at the origi
 *Fill me in*
 
 ## Stretch 2
+
+With Thomas Esplin on 10/21/2025
 
 I will simply use the covid-19 dataset provided to test the algorithm. I suspect that the insights will be quite interesting. It could give me an idea as to the overall size of the hull. In this case, I imagine that it would indicate how the
 size and complexity of the hull increased (or decreased over time).
