@@ -10,10 +10,7 @@ def compute_hull_dvcq(points: list[tuple[float, float]]) -> list[tuple[float, fl
     left_side, right_side = divide_points(points)
     left_hull = compute_hull_dvcq(left_side)
     right_hull = compute_hull_dvcq(right_side)
-    assert left_hull
-    assert right_hull
     merged_hull = merge_hulls(left_hull, right_hull)
-    assert merged_hull
     return merged_hull
 
 def merge_hulls(left_hull: list[tuple[float, float]], 
