@@ -28,7 +28,7 @@ def compute_hull_dvcq(points: list[tuple[float, float]]) -> list[tuple[float, fl
     return merged_hull
 ```
 
-Here's the top level for the algorithm. We see that the algorithm divides the points by 2 each time. The important thing here is that 2 is therefore the branching factor a, and the reduction factor b. This is because each call the function divides it into two subproblems that are half the size. So in our recurrance relation a = 2, and b = 2. This also means that our time complexity will be determined by the time complexity of merging hulls, which represents the time complexity of work that we do on each node in combining the recurance together. It is our d.
+Here's the top level for the algorithm. We see that the algorithm divides the points by 2 each time. The important thing here is that 2 is therefore the branching factor a, and the reduction factor b. There are two recursive calls each function call. This is because each call the function divides it into two sub problems that are half the size. So in our recurrence relation a = 2, and b = 2. This also means that our time complexity will be determined by the time complexity of merging hulls, which represents the time complexity of work that we do on each node in combining the recurrence together. It is our d.
 
 ```py
 def merge_hulls(left_hull: list[tuple[float, float]], 
@@ -172,22 +172,41 @@ There could be further problems when using different types of distributions to c
 
 | N     | time (ms) |
 |-------|-----------|
-| 10    |           |
-| 100   |           |
-| 1000  |           |
-| 10000 |           |
-| 20000 |           |
-| 40000 |           |
-| 50000 |           |
+| 10    |     0.1   |
+| 100   |    0.8    |
+| 1000  |    8.3    |
+| 10000 |    80.3   |
+| 20000 |    181.6  |
+| 40000 |    335.4  |
+| 50000 |     448.1 |
 
 ### Comparison of Theoretical and Empirical Results
 
-- Theoretical order of growth: *copy from section above* 
-- Empirical order of growth (if different from theoretical): 
+- Theoretical order of growth: **O(n log n)**
+- Empirical order of growth (if different from theoretical): **O(n)**
 
-![img](img.png)
+- Theoretical constant: 0.00106
+- Empirical constant: 0.00868
 
-*Fill me in*
+![img](nlogn_constants.png)
+
+As you can see, the constant distribution for my theoretical order of O(n log n) is far from uniform
+
+![img](linear_constants.png)
+
+On the other hand, the linear constant distribution is completely uniform. It's a near perfect match
+
+![img](empirical_plot.png)
+
+Furthermore, we see here that linear time complexity O(n) is a near perfect match in this situation. This is not what I was expecting and is completely different from my theoretical of O(n log n).
+
+In reconciling this, I have come up with a few reasons as to why the theoretical was so off. First off all, I think that it could do with an overestimation of the time complexity of the get_tangent function. In that function, I say that its theoretically possible for the algorithm to search through a total of n points to find a tangent!
+
+While this is true in theory, in practice (when I have personally done the problem myself), it generally never takes n operations to find a tangent line. I think that this worse case scenario is very unrealistic under these conditions. In reality, it seems that the algorithm was able to compute the tangent line in approximately a constant empirical time complexity.
+
+However, it still must not have been truly constant because of all the array duplications, searching, and index operations that guarantee linear time. Part of the issue here is that the master theorem guarantees this big O as the input size approaches infinity. Perhaps we would have seen it reflected more if we would have done more testing.
+
+All in all, I think that the empirical of **O(n)** doesn't match my theoretical of O(n log n) primarily because of my worst case scenario regarding the tangent line computation.
 
 ## Stretch 1
 
