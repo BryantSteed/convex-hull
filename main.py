@@ -2,7 +2,7 @@ import argparse
 from time import time
 
 from generate import generate_random_points
-from convex_hull import compute_hull_dvcq
+from convex_hull import compute_hull_dvcq, compute_hull_other
 from plotting import plot_points, draw_hull, title, show_plot
 
 
@@ -12,6 +12,7 @@ def main(n: int, distribution: str, seed: int | None):
 
     start = time()
     hull_points = compute_hull_dvcq(points)
+    # hull_points = compute_hull_other(points)
     end = time()
 
     draw_hull(hull_points)

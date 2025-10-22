@@ -102,5 +102,36 @@ def divide_points(points: list[tuple[float, float]]) -> tuple[list[tuple[float, 
 
 
 def compute_hull_other(points: list[tuple[float, float]]) -> list[tuple[float, float]]:
-    """Return the subset of provided points that define the convex hull"""
-    return []
+    if len(points) <= 2:
+        return points
+    leftmost = min(points, key=lambda p: (p[0], p[1]))
+    hull = []
+    current = leftmost
+    while True:
+        hull.append(current)
+        next_point = points[0]
+        for candidate in points:
+            if candidate == current:
+                continue
+            if next_point == current or is_counterclockwise(current, next_point, candidate):
+                next_point = candidate
+        current = next_point
+        if current == leftmost:
+            break
+    return hull
+
+
+def is_counterclockwise(p1: tuple[float, float], 
+                        p2: tuple[float, float], 
+                        p3: tuple[float, float]) -> bool:
+    cross_product = ((p2[0] - p1[0]) * (p3[1] - p1[1]) - 
+                     (p2[1] - p1[1]) * (p3[0] - p1[0]))
+    
+    if cross_product > 0:
+        return True
+    elif cross_product == 0:
+        dist_p2 = (p2[0] - p1[0])**2 + (p2[1] - p1[1])**2
+        dist_p3 = (p3[0] - p1[0])**2 + (p3[1] - p1[1])**2
+        return dist_p3 > dist_p2
+    else:
+        return False

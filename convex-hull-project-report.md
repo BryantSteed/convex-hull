@@ -168,6 +168,8 @@ For my design, my goal is to ensure that I am able to path both the baseline and
 
 There could be further problems when using different types of distributions to create the hull problem. The key to solving this is ensuring that my algorithm works independently of any distributional suppositions that I may have about the data.
 
+They all passed on the first try.
+
 ### Empirical Data - Convex Hull Divide-and-Conquer
 
 | N     | time (ms) |
@@ -220,31 +222,41 @@ The idea is to continue doing this and wrap around until you arrive at the origi
 
 ### Chosen Convex Hull Implementation Description
 
-*Fill me in*
+With the gift wrapping algorithm, it works by starting with a single point that is guaranteed to be on the hull (in this case the leftmost point). After that, it iterates through all the other points in the hull and finds the point that is the most counterclockwise to the point in question. The algorithm uses the cross product to compute this. The idea here is to then select the point adjacent to the previous point that must be on the whole. And the point that is the most mathematically counterclockwise to the point is guaranteed to be on the hull.
+
+It then continues the loop, selecting more and more points that make up the convex hull. The loops then terminates when you have wrapped all the way around to the beginning. The obvious downside here is that you technically have to iterate through all the points for a given candidate before you can move on in the loop to compute another point on the hull.
 
 ### Empirical Data
 
 | N     | time (ms) |
 |-------|-----------|
-| 10    |           |
-| 100   |           |
-| 1000  |           |
-| 10000 |           |
-| 20000 |           |
-| 40000 |           |
-| 50000 |           |
+| 10    |    0.0    |
+| 100   |    0.3    |
+| 1000  |    3.2    |
+| 10000 |    57.7   |
+| 20000 |     132   |
+| 40000 |   253.9   |
+| 50000 |    327.6  |
 
 ### Comparison of Chosen Algorithm with Divide-and-Conquer Convex Hull
 
 #### Algorithmic Differences
 
-*Fill me in*
+The main algorithmic differences between the divide and conquer algorithm and the gift wrapping algorithm are that the divide and conquer algorithm effectively guarantees a big O upper bound of n log n (see my theoretical analysis from baseline). 
+
+However, because the gift wrapping algorithm requires a for loop across all the points for each point, it effectively gives you a worst case scenario of O(n^2) if all n points in the distribution are on the hull. This is because that outer while loop runs as many times as there are points on the hull. This would also mean that it could perform really well for very dense point distributions where less points are on the hull.
 
 #### Performance Differences
 
-*Fill me in*
+![img](performace_comparison.png)
+
+As you can see here, both algorithms largely had the same performance. The minute difference between them doesn't seem like enough to actually be considered significant. They certainly don't differ from each other by an order or magnitude. However, even with that, it is surprised to me that the gift wrap algorithm performed better (even though by just a small margin) than the dive and conquer algorithm.
+
+I think that the difference and skew exist because the performance of the gift wrap algorithm is highly dependent on the number of points that make up the hull (for reasons explained previously with the while loop). This would also explain why as the sample size increased, the gift wrap algorithm tended to do comparatively better than the divide and conquer. This is because with a higher sample size, more of the points are likely to be within the hull as opposed to being a part of it. This likely indicates that the gift wrap algorithm should be used for large, dense datasets, and the divide and conquer should be used for less dense datasets.
 
 ## Stretch 2
+
+### Design Experience
 
 With Thomas Esplin on 10/21/2025
 
@@ -252,6 +264,24 @@ I will simply use the covid-19 dataset provided to test the algorithm. I suspect
 size and complexity of the hull increased (or decreased over time).
 
 This would be very useful because it could provide insight into how viruses like covid-19 spread. I will parse the csv file by using the built in .split() function on python strings. I will then analyze the data using the longitude and latitude and data points.
+
+### Analysis
+
+I used the provided covid-19 dataset to run the convex hull algorithm. This has vast implications in the filed of immunology and viral spread. If we can better understand how a virus spreads and infects various populations, we will be much better suited to respond to similar crises in the future.
+
+![img](covid_first.png)
+
+As you can see in the first time series The points appear to be substantially concentrated around the top right of the world. The convex hull gives an idea as to how far the virus has actually spread across the world. Essentially, the idea is that the hull gives us the boundary of the virus.
+
+![img](covid_second.png)
+
+This is quite a different result on the second time series. However, the convex hull remain largely the same (with a single exception). The hull has grown slightly more complex, but its too little a change to really be considered significant.
+
+![img](covid_third.png)
+
+This third time series hull is similar to the other two. I'm sure that if the data were a little more comprehensive and included more than just a month, we'd see the hull expand a lot more. Regardless of that, we are seeing additional cases stack up in the bottom left corner of the world. Having the convex hull as a boundary here helps because it tells us the farthest boundary that the virus has spread to.
+
+This goes to show that a virus can spread to its maximum capacity (in terms of geo-spatial area) very quickly -- even without completely saturating the center of its claims. We saw in later time series that the center of the viral claims began to saturated with more claims, but that was after the virus had already spread to several countries! It goes to show the importance of ensuring that a virus stays isolated in a single location to prevent further viral saturation.
 
 ## Project Review
 
