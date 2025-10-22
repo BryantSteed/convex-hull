@@ -285,5 +285,12 @@ This goes to show that a virus can spread to its maximum capacity (in terms of g
 
 ## Project Review
 
-*Fill me in*
+I did the project review with Katherine Mckinney on 10/22/2025.
 
+We talked a lot about ways that we avoided duplicate code. I avoided it by adding a general function that took specific routines as parameters. She avoided it by decomposing methods into smaller subunits for certain tasks. We both used an array to implement the baseline. We both copied the list more time than we wanted to.
+
+Our theoretical and empirical were the same and showed that the dvcq algorithm was actually empirically linear. We both thought that the master theorem's worst case scenario could be a reason why this was the case.
+
+She used a similar type of algorithm to test stretch 1 with. She also found it to be slightly faster than the dvcq version. For stretch 2, we both thought it was interesting that the virus was able to spread so quickly (even if its area hadn't been densely populated yet).
+
+Overall, we both found that the convex hull algorithm has several important implementations that could be of use in different scenarios. It also has several applications in different fields of study such as immunology.
